@@ -6,6 +6,8 @@ const ctx = canvas.getContext("2d");
 canvas.width = 550;
 canvas.height = 800;
 
+let enemies = [];
+
 // created a class for the player that will be controlling the ship
 class Player {
   constructor(x, y, bulletController) {
@@ -43,16 +45,16 @@ class Player {
   }
 
   move() {
-    if (this.downPressed) {
+    if (this.downPressed && this.y + this.height < canvas.height) {
       this.y += this.speed;
     }
-    if (this.upPressed) {
+    if (this.upPressed && this.y > 0) {
       this.y -= this.speed;
     }
-    if (this.leftPressed) {
+    if (this.leftPressed && this.x > 0) {
       this.x -= this.speed;
     }
-    if (this.rightPressed) {
+    if (this.rightPressed && this.x + this.width < canvas.width) {
       this.x += this.speed;
     }
   }
@@ -141,7 +143,37 @@ class Bullet {
   }
 }
 
-//class constructor for animes
+//class constructor for alien animes
+
+class Enemy {
+  constructor(x, y, health) {
+    this.x = x;
+    this.y = y;
+    this.health = health;
+    this.width = 40;
+    this.height = 40;
+    this.image = new Image();
+    this.image.src = "enemies.jpg";
+  }
+
+  drawImage(ctx) {
+    if (this.health > 0) {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+  }
+
+  takeDamage() {
+    this.health--;
+    if (this.health <= 0) {
+    }
+  }
+
+  update() {
+    if (this.y + this.height < canvas.height) {
+      this.y += 2;
+    }
+  }
+}
 
 let bulletController = new BulletController(canvas);
 let player = new Player(
@@ -157,6 +189,38 @@ backgroundImage.src = "background.jpeg";
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+  // Create new enemies randomly
+  if (Math.random() < 0.01) {
+    const enemy = new Enemy(Math.random() * canvas.width, -50, 2);
+    enemies.push(enemy);
+  }
+
+  // draw the enemies
+  enemies.forEach((enemy, index) => {
+    enemy.update();
+    enemy.drawImage(ctx);
+
+    // Check if the enemy is hit by a bullet
+    bulletController.bullets.forEach((bullet, bulletIndex) => {
+      if (
+        bullet.x < enemy.x + enemy.width &&
+        bullet.x + bullet.width > enemy.x &&
+        bullet.y < enemy.y + enemy.height &&
+        bullet.y + bullet.height > enemy.y
+      ) {
+        enemy.takeDamage();
+        bulletController.bullets.splice(bulletIndex, 1);
+      }
+    });
+
+    // Checking if the enemy reaches the bottom of the screen
+    if (enemy.y > canvas.height) {
+      enemies.splice(index, 1);
+    }
+  });
+
+  // draw the bullets and the player
   bulletController.draw(ctx);
   player.drawImage(ctx);
 }
