@@ -1,0 +1,19 @@
+main idea creating battle space game that protects the earth from aliens 
+
+1- starting the idea with basic html, css to give some visuals.
+2- adding the ship and eneimes of earth 
+3- starting with js with declaring varibles that you will 
+first then add more as you go on 
+4- creating basic function for the ship and aliens 
+5- use the alien function to help the aliens appear randomly and horizintal
+6- make the eneimes take two shot before they can be destroyed.
+7- make the ship fire bullets 
+8- give the ship the ability to use keyboard arrows to move left and right and the fire button 
+9- create score on top to show how many aliens you have destryoed. 
+
+hungry for more 
+10 -  creating a message with a button to start the game that asks if you want to protect the earth then it dissapers after starting th game 
+11- adding better styling to the game using css and shadow to the white areas
+12 - creating a restart button after losing the game
+
+13 - adding some animation when you first load the site and give some effects to the message for the start button. 
