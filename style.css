@@ -5,6 +5,8 @@ body {
   padding: 0;
   margin: 0;
   height: 100vh;
+  box-shadow: inset 5px 5px 160px rgba(136, 34, 195),
+    inset -5px -5px 160px rgba(17, 51, 161);
 }
 
 h1 {
