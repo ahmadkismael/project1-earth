@@ -141,7 +141,7 @@ class Bullet {
   }
 }
 
-//class constructor for animes 
+//class constructor for animes
 
 let bulletController = new BulletController(canvas);
 let player = new Player(
