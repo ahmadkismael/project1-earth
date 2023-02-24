@@ -7,6 +7,7 @@ canvas.width = 550;
 canvas.height = 800;
 
 let enemies = [];
+let enemiesReachedBottom = 0;
 
 // created a class for the player that will be controlling the ship
 class Player {
@@ -17,6 +18,7 @@ class Player {
     this.width = 50;
     this.height = 50;
     this.speed = 4;
+    this.score = 0;
     this.image = new Image();
     this.image.src = "ship.png";
 
@@ -28,7 +30,14 @@ class Player {
   drawImage(ctx) {
     this.move();
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    this.drawScore(ctx);
     this.shoot();
+  }
+
+  drawScore(ctx) {
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Score: ${this.score}`, 10, 30);
   }
 
   // made a function when the keys are pressed the ship will move and shoot
@@ -147,13 +156,20 @@ class Bullet {
 
 class Enemy {
   constructor(x, y, health) {
-    this.x = x;
-    this.y = y;
-    this.health = health;
     this.width = 40;
     this.height = 40;
     this.image = new Image();
     this.image.src = "enemies.jpg";
+
+    if (x < 0) {
+      x = 0;
+    } else if (x + this.width > canvas.width) {
+      x = canvas.width - this.width;
+    }
+
+    this.x = x;
+    this.y = y;
+    this.health = health;
   }
 
   drawImage(ctx) {
@@ -167,12 +183,19 @@ class Enemy {
     if (this.health <= 0) {
       const index = enemies.indexOf(this);
       enemies.splice(index, 1);
+      player.score += 1;
     }
   }
 
   update() {
     if (this.y + this.height < canvas.height) {
       this.y += 2;
+    } else {
+      enemiesReachedBottom++;
+
+      if (enemiesReachedBottom >= 1) {
+        gameOver();
+      }
     }
   }
 }
@@ -193,8 +216,8 @@ function gameLoop() {
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
   // Create new enemies randomly
-  if (Math.random() < 0.01) {
-    const enemy = new Enemy(Math.random() * canvas.width, -25, 2);
+  if (Math.random() < 0.02) {
+    const enemy = new Enemy(Math.random() * canvas.width, -60, 2);
     enemies.push(enemy);
   }
 
@@ -227,4 +250,4 @@ function gameLoop() {
   player.drawImage(ctx);
 }
 
-setInterval(gameLoop, 1000 / 60);
+setInterval(gameLoop, 350 / 60);
