@@ -165,6 +165,8 @@ class Enemy {
   takeDamage() {
     this.health--;
     if (this.health <= 0) {
+      const index = enemies.indexOf(this);
+      enemies.splice(index, 1);
     }
   }
 
@@ -192,7 +194,7 @@ function gameLoop() {
 
   // Create new enemies randomly
   if (Math.random() < 0.01) {
-    const enemy = new Enemy(Math.random() * canvas.width, -50, 2);
+    const enemy = new Enemy(Math.random() * canvas.width, -25, 2);
     enemies.push(enemy);
   }
 
